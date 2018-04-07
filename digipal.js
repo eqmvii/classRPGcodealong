@@ -96,7 +96,32 @@ function kindOfPet(digipal){
             actionsArray.push("go outside");
             actionsArray.push("go inside");
         } else if (answers.petType === "cat") {
-            console.log("No cat implemented yet!");
+            digipal.houseCondition = 100;
+            digipal.meow = function() {
+                console.log("Meowwwww!");
+            }
+            // destroyFurniture() - Decreases houseCondition by 10 and prints "MUAHAHAHAHA! TAKE THAT FURNITURE!" to the screen. Also sets bored to false and sleepy to true. If houseCondition is equal to 0, then this should not run anymore.  
+            // buyNewFurniture() - Increases houseCondition by 50 and prints "Are you sure about that?" to the screen.
+            digipal.destroyFurniture = function () {
+                this.houseCondition -= 10;
+                if (this.houseCondition <= 0) {
+                    console.log("All furniture already destroyed");
+                    return;
+                }
+                console.log(`MWAHAHAHA TAKE THAT FURNITURE! House is at (${this.houseCondition} / 100) condition`);
+                this.bored = false;
+                this.sleepy = true;
+            };
+            digipal.buyNewFurniture = function () {
+                this.houseCondition += 50;
+                if (this.houseCondition >= 100) {
+                    this.houseCondition = 100;
+                }
+                console.log(`Bought new furniture; House is at (${this.houseCondition} / 100) condition`);
+            }
+            actionsArray.push("meow");
+            actionsArray.push("destroy furniture");
+            actionsArray.push("buy new furniture");
         }
         actionsArray.push("quit");
         gameLoop(digipal, actionsArray);
@@ -125,6 +150,12 @@ function gameLoop(digipal, actionsArray) {
             digipal.goOutside();
         } else if (answers.action === "go inside") {
             digipal.goInside();
+        } else if (answers.action === "meow") {
+            digipal.meow();
+        } else if (answers.action === "destroy furniture") {
+            digipal.destroyFurniture();
+        } else if (answers.action === "buy new furniture") {
+            digipal.buyNewFurniture();
         } else if (answers.action === "quit") {
             console.log("Goodbye!");
             return;
@@ -133,7 +164,7 @@ function gameLoop(digipal, actionsArray) {
         }
         setTimeout(function() {
             gameLoop(digipal, actionsArray);
-        }, 250)
+        }, 800)
     })
 
 }
