@@ -2,10 +2,13 @@
   "name": "classrpgcodealong",
   "version": "1.0.0",
   "description": "object code along",
-  "main": "index.js",
+  "main": "pokemon.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "eqmvii",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "inquirer": "^5.2.0"
+  }
 }
