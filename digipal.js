@@ -103,11 +103,15 @@ function kindOfPet(digipal){
             // destroyFurniture() - Decreases houseCondition by 10 and prints "MUAHAHAHAHA! TAKE THAT FURNITURE!" to the screen. Also sets bored to false and sleepy to true. If houseCondition is equal to 0, then this should not run anymore.  
             // buyNewFurniture() - Increases houseCondition by 50 and prints "Are you sure about that?" to the screen.
             digipal.destroyFurniture = function () {
-                this.houseCondition -= 10;
+                if (this.sleepy) {
+                    console.log("Too sleepy to destroy anything.");
+                    return;
+                }
                 if (this.houseCondition <= 0) {
                     console.log("All furniture already destroyed");
                     return;
                 }
+                this.houseCondition -= 10;
                 console.log(`MWAHAHAHA TAKE THAT FURNITURE! House is at (${this.houseCondition} / 100) condition`);
                 this.bored = false;
                 this.sleepy = true;
