@@ -19,13 +19,19 @@ function Pokemon(name, level = 1) {
     };
     this.isAlive = () => this.hp > 0;
     this.battle = function(defender) {
-        defender.hp -= this.attack;
+        var damage = (Math.random() * this.attack) - (defender.defense / 10);
+        if (damage < 0) {
+            damage = 0;
+        }
+        console.log(`${this.name} hits ${defender.name} for ${damage} damage!`);
+        defender.hp -= damage;
+        defender.hp = defender.hp.toFixed(2);
     }
 }
 var pokemonArray = [];
 
-pokemonArray.push(new Pokemon("Pikachu", 3));
-pokemonArray.push(new Pokemon("Charmander", 5));
+pokemonArray.push(new Pokemon("Pikachu", 60));
+pokemonArray.push(new Pokemon("Charmander", 57));
 // pokemonArray.push(new Pokemon("Blastoise", 50));
 
 // initial stats print
@@ -42,10 +48,19 @@ for (let i = 0; i < pokemonArray.length; i++) {
 }
 
 pokemonStatus(pokemonArray);
-pokemonArray[0].battle(pokemonArray[1]);
+while (pokemonArray[0].isAlive() && pokemonArray[1].isAlive()) {
+    pokemonArray[0].battle(pokemonArray[1]);
+    pokemonArray[1].battle(pokemonArray[0]);
+    // pokemonStatus(pokemonArray);
+}
+console.log(" = = = = = = = = = = = = = =");
+console.log("A pokemon died!!!");
+console.log(" = = = = = = = = = = = = = =");
+
 pokemonStatus(pokemonArray);
 
-// state 
+
+// print out whether each pokemon is still alive, and if so, what their hitpoints are at 
 function pokemonStatus(pokeArray) {
     pokeArray.forEach(function (pokemon) {
         if (pokemon.isAlive()) {
