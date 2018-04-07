@@ -58,16 +58,59 @@ inquirer.prompt([
     console.log(answers);
     var myPet = new DigitalPal(answers.petName);
     myPet.greet();
-    gameLoop(myPet);
+    kindOfPet(myPet);
 });
 
-function gameLoop(digipal) {
+function kindOfPet(digipal){
+    inquirer.prompt([
+        {
+            type: "list",
+            name: "petType",
+            message: `What kind of digital pal is ${digipal.name}?`,
+            choices: ["dog", "cat", "neither"]
+        }
+    ]).then(function(answers){
+        var actionsArray = ["feed", "sleep", "play"];
+        if(answers.petType === "dog"){
+            // console.log("No dog yet!");
+            digipal.outside = false;
+            digipal.bark = function () { console.log("woof! woof!"); };
+            digipal.goOutside = function () { 
+                if(this.outside){
+                    console.log("I am already outside!");
+                }
+                else {
+                    console.log("I am going outside!");
+                    this.outside = true;
+                }
+            };
+            digipal.goInside = function () {
+                if (this.outside) {
+                    console.log("I am going inside now!");
+                    this.outside = false;
+                } else {
+                    console.log("I am already inside!");
+                }
+            };
+            actionsArray.push("bark");
+            actionsArray.push("go outside");
+            actionsArray.push("go inside");
+        } else if (answers.petType === "cat") {
+            console.log("No cat implemented yet!");
+        }
+        actionsArray.push("quit");
+        gameLoop(digipal, actionsArray);
+
+    });
+}
+
+function gameLoop(digipal, actionsArray) {
     inquirer.prompt([
         {
             type: "list",
             name: "action",
             message: `Do something with ${digipal.name}?`,
-            choices: ["feed", "sleep", "play", "quit"]
+            choices: actionsArray
         }
     ]).then(function(answers) {
         if (answers.action === "feed") {
@@ -76,6 +119,12 @@ function gameLoop(digipal) {
             digipal.sleep();
         } else if (answers.action === "play") {
             digipal.play();
+        } else if (answers.action === "bark") {
+            digipal.bark();
+        } else if (answers.action === "go outside") {
+            digipal.goOutside();
+        } else if (answers.action === "go inside") {
+            digipal.goInside();
         } else if (answers.action === "quit") {
             console.log("Goodbye!");
             return;
@@ -83,7 +132,7 @@ function gameLoop(digipal) {
             console.log("Action not yet implemented");
         }
         setTimeout(function() {
-            gameLoop(digipal);
+            gameLoop(digipal, actionsArray);
         }, 250)
     })
 
