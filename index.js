@@ -20,18 +20,27 @@ function Pokemon(name, level = 1) {
     this.isAlive = () => this.hp > 0;
     this.battle = function(defender) {
         var damage = (Math.random() * this.attack) - (defender.defense / 10);
+        damage = damage.toFixed(2);
         if (damage < 0) {
             damage = 0;
         }
         console.log(`${this.name} hits ${defender.name} for ${damage} damage!`);
         defender.hp -= damage;
-        defender.hp = defender.hp.toFixed(2);
+    };
+    this.levelUp = function () {
+        console.log(`${this.name} leveled up!`);
+        this.attack += 1;
+        this.defense += 1;
+        this.special += 1;
+        this.level += 1;
+        this.hp = 100 + (5 * this.level); // restore all hp
+        this.printStats();
     }
 }
 var pokemonArray = [];
 
-pokemonArray.push(new Pokemon("Pikachu", 60));
-pokemonArray.push(new Pokemon("Charmander", 57));
+pokemonArray.push(new Pokemon("Pikachu", 10));
+pokemonArray.push(new Pokemon("Charmander", 10));
 // pokemonArray.push(new Pokemon("Blastoise", 50));
 
 // initial stats print
@@ -54,8 +63,15 @@ while (pokemonArray[0].isAlive() && pokemonArray[1].isAlive()) {
     // pokemonStatus(pokemonArray);
 }
 console.log(" = = = = = = = = = = = = = =");
-console.log("A pokemon died!!!");
+console.log("The battle is over!");
 console.log(" = = = = = = = = = = = = = =");
+if(pokemonArray[0].isAlive()){
+    pokemonArray[0].levelUp();
+    console.log(`${pokemonArray[1].name} was defeated.`);
+} else {
+    pokemonArray[1].levelUp();
+    console.log(`${pokemonArray[0].name} was defeated.`);
+}
 
 pokemonStatus(pokemonArray);
 
@@ -64,7 +80,7 @@ pokemonStatus(pokemonArray);
 function pokemonStatus(pokeArray) {
     pokeArray.forEach(function (pokemon) {
         if (pokemon.isAlive()) {
-            console.log(`${pokemon.name} has ${pokemon.hp} hitpoints`);
+            console.log(`${pokemon.name} has (${pokemon.hp} / ${100 + pokemon.level * 5}) hitpoints`);
         }
         else {
             console.log(`${pokemon.name} is dead :(`);
